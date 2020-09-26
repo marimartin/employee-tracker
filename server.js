@@ -176,6 +176,54 @@ function addDep() {
 }
 
 function addRole() {
+    connection.query(
+        "SELECT * FROM department",
+        function (err, data) {
+            if (err) throw err;
+            console.log(data);
+            inquirer
+                .prompt([
+                    {
+                        name: "title",
+                        type: "input",
+                        message: "What is the title of this role?"
+                    },
+                    {
+                        name: "salary",
+                        type: "input",
+                        message: "What is the salary for this role?"
+                    },
+                    {
+                        name: "departmentID",
+                        type: "list",
+                        message: "Which department is this role in?",
+                        choices: data.map(function (item) {
+                            return item.name;
+                        })
+                    }
+                ])
+                .then(function (answer) {
+                    // when finished prompting, insert a new item into the db with that info
+                    connection.query(
+                        "INSERT INTO roll SET ?",
+                        {
+                            title: answer.title,
+                            salary: answer.salary,
+                            department_id: data.find(function (item) {
+                                return item.name === answer.departmentID;
+                            }).id
+                        },
+                        function (err) {
+                            if (err) throw err;
+                            console.log("Your new role has been added");
+                            // go back to starting prompt
+                            start();
+                        }
+                    );
+                });
+        }
+
+    )
 
 }
 
