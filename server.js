@@ -32,93 +32,61 @@ function start() {
             type: "list",
             message: "What would you like to do?",
             choices: [
-                "View All Employees By Department",
-                "View All Employees By Manager",
+                "View Department",
+                "View Roles",
+                "View Employees",
                 "Add Employee",
-                "Remove Employee",
+                "Add Department",
+                "Add Role",
                 "Update Employee Role",
-                "Update Employee Manager",
-                "View All Roles",
-                "View Total Budget",
+                "Remove Employee",
                 "Exit"]
         })
         .then(function (answer) {
             // based on their answer, either call the bid or the post functions
-            if (answer.actionTaken === "View All Employees By Department") {
-                viewEmpDep();
+            if (answer.actionTaken === "View Department") {
+                viewDep();
             }
-            else if (answer.postOrBid === "View All Employees By Manager") {
-                viewEmpMan();
+            else if (answer.postOrBid === "View Roles") {
+                viewRoles();
+            }
+            else if (answer.postOrBid === "View Employees") {
+                viewEmp();
             }
             else if (answer.postOrBid === "Add Employee") {
                 addEmp();
             }
-            else if (answer.postOrBid === "Remove Employee") {
-                removeEmp();
+            else if (answer.postOrBid === "Add Department") {
+                addDep();
+            }
+            else if (answer.postOrBid === "Add Role") {
+                addRole();
             }
             else if (answer.postOrBid === "Update Employee Role") {
                 updateEmpRole();
             }
-            else if (answer.postOrBid === "Update Employee Manager") {
-                updateEmpMan();
-            }
-            else if (answer.postOrBid === "View All Roles") {
-                viewRoles();
-            }
-            else if (answer.postOrBid === "View Total Budget") {
-                viewBudget();
+            else if (answer.postOrBid === "Remove Employee") {
+                removeEmp();
             } else {
                 connection.end();
             }
         });
 }
 
-function viewEmpDep() {
-    inquirer
-        .prompt({
-            name: "department",
-            type: "list",
-            message: "What would you like to do?",
-            choices: [
-                "Finance",
-                "Legal",
-                "Engineering",
-                "Sales"]
-        })
-        .then(function (answer) {
-            console.log(answer.song);
-            connection.query("SELECT * FROM employee WHERE ?", { department_id: answer.name }, function (err, res) {
-                if (err) throw err;
-                console.log();
-                start();
-            });
-        });
+function viewDep() {
 };
-
-function viewEmpMan() {
-
-};
-
-function addEmp() {
-
-};
-
-function removeEmp() {
-
-};
-
-function updateEmpRole() {
-
-};
-
-function updateEmpMan() {
-
-};
-
 function viewRoles() {
-
+};
+function viewEmp() {
+};
+function addEmp() {
+};
+function addDep() {
+};
+function addRole() {
+};
+function updateEmpRole() {
+};
+function removeEmp() {
 };
 
-function viewBudget() {
-
-};
