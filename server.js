@@ -74,7 +74,17 @@ function start() {
 }
 
 function viewDep() {
+    connection.query(
+        "SELECT * FROM department",
+        function (err, departments) {
+            if (err) throw err;
+            console.table(departments);
+            start();
+        }
+
+    )
 }
+
 
 function viewRoles() {
 }
