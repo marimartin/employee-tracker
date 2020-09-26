@@ -74,7 +74,6 @@ function start() {
 }
 
 function viewDep() {
-
 }
 
 function viewRoles() {
@@ -84,49 +83,70 @@ function viewEmp() {
 }
 
 function addEmp() {
-    inquirer
-        .prompt([
-            {
-                name: "firstName",
-                type: "input",
-                message: "What is the employee's first name?"
-            },
-            {
-                name: "lastName",
-                type: "input",
-                message: "What is the employee's last name?"
-            },
-            {
-                name: "roleID",
-                type: "list",
-                message: "What is the employees role?",
-                choices: []
-            },
-            {
-                name: "managerID",
-                type: "list",
-                message: "Who is the employee's manager?",
-                choices: []
-            }
-        ])
-        .then(function (answer) {
-            // when finished prompting, insert a new item into the db with that info
+    connection.query(
+        "SELECT * FROM employee",
+        function (err, employees) {
+            if (err) throw err;
+
             connection.query(
-                "INSERT INTO employees SET ?",
-                {
-                    first_name: answer.firstName,
-                    last_name: answer.lastName,
-                    role_id: answer.roleID,
-                    manager_id: answer.managerID || null
-                },
-                function (err) {
+                "SELECT * FROM roll",
+                function (err, roles) {
                     if (err) throw err;
-                    console.log("Your new employee has been added");
-                    // go back to starting prompt
-                    start();
-                }
-            );
+
+                    inquirer
+                        .prompt([
+                            {
+                                name: "firstName",
+                                type: "input",
+                                message: "What is the employee's first name?"
+                            },
+                            {
+                                name: "lastName",
+                                type: "input",
+                                message: "What is the employee's last name?"
+                            },
+                            {
+                                name: "roleID",
+                                type: "list",
+                                message: "What is the employees role?",
+                                choices: roles.map(function (item) {
+                                    return item.title;
+                                })
+                            },
+                            {
+                                name: "managerID",
+                                type: "list",
+                                message: "Who is the employee's manager?",
+                                choices: [...employees.map(function (item) {
+                                    return `${item.first_name} ${item.last_name}`;
+                                }), "none"]
+                            }
+                        ])
+                        .then(function (answer) {
+                            // when finished prompting, insert a new item into the db with that info
+                            connection.query(
+                                "INSERT INTO employee SET ?",
+                                {
+                                    first_name: answer.firstName,
+                                    last_name: answer.lastName,
+                                    role_id: roles.find(function (item) {
+                                        return item.title === answer.roleID;
+                                    }).id,
+                                    manager_id: employees.find(function (item) {
+                                        return `${item.first_name} ${item.last_name}` === answer.managerID;
+                                    }).id || null,
+                                },
+                                function (err) {
+                                    if (err) throw err;
+                                    console.log("Your new employee has been added");
+                                    // go back to starting prompt
+                                    start();
+                                }
+                            );
+                        });
+                });
         });
+
 }
 
 function addDep() {
@@ -156,42 +176,7 @@ function addDep() {
 }
 
 function addRole() {
-    inquirer
-        .prompt([
-            {
-                name: "title",
-                type: "input",
-                message: "What is the title of this role?"
-            },
-            {
-                name: "salary",
-                type: "input",
-                message: "What is the salary for this role?"
-            },
-            {
-                name: "departmentID",
-                type: "list",
-                message: "Which department is this role in?",
-                choices: []
-            }
-        ])
-        .then(function (answer) {
-            // when finished prompting, insert a new item into the db with that info
-            connection.query(
-                "INSERT INTO employees SET ?",
-                {
-                    title: answer.title,
-                    salary: answer.salary,
-                    department_id: answer.departmentID
-                },
-                function (err) {
-                    if (err) throw err;
-                    console.log("Your new role has been added");
-                    // go back to starting prompt
-                    start();
-                }
-            );
-        });
+
 }
 
 function updateEmpRole() {
