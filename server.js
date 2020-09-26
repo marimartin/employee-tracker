@@ -99,6 +99,15 @@ function viewRoles() {
 }
 
 function viewEmp() {
+    connection.query(
+        "SELECT * FROM employee",
+        function (err, employees) {
+            if (err) throw err;
+            console.table(employees);
+            start();
+        }
+
+    )
 }
 
 function addEmp() {
