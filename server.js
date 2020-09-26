@@ -32,7 +32,7 @@ function start() {
             type: "list",
             message: "What would you like to do?",
             choices: [
-                "View Department",
+                "View Departments",
                 "View Roles",
                 "View Employees",
                 "Add Employee",
@@ -87,6 +87,15 @@ function viewDep() {
 
 
 function viewRoles() {
+    connection.query(
+        "SELECT * FROM roll",
+        function (err, roles) {
+            if (err) throw err;
+            console.table(roles);
+            start();
+        }
+
+    )
 }
 
 function viewEmp() {
