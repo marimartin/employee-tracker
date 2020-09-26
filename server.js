@@ -228,6 +228,61 @@ function addRole() {
 }
 
 function updateEmpRole() {
+    connection.query(
+        "SELECT * FROM employee",
+        function (err, employees) {
+            if (err) throw err;
+            connection.query(
+                "SELECT * FROM roll",
+                function (err, roles) {
+                    if (err) throw err;
+
+                    inquirer
+                        .prompt([
+
+                            {
+                                name: "employeeName",
+                                type: "list",
+                                message: "Which employee would you like to update?",
+                                choices: employees.map(function (item) {
+                                    return `${item.first_name} ${item.last_name}`;
+                                })
+                            },
+                            {
+                                name: "role",
+                                type: "list",
+                                message: "What is their new role?",
+                                choices: roles.map(function (item) {
+                                    return item.title;
+                                })
+                            }
+                        ])
+                        .then(function (answer) {
+                            // when finished prompting, insert a new item into the db with that info
+                            connection.query(
+                                "UPDATE employee SET ? WHERE ?",
+                                [
+                                    {
+                                        role_id: roles.find(function (item) {
+                                            return item.title === answer.role;
+                                        }).id
+                                    },
+                                    {
+                                        id: employees.find(function (item) {
+                                            return `${item.first_name} ${item.last_name}` === answer.employeeName;
+                                        }).id
+                                    }
+                                ],
+                                function (err) {
+                                    if (err) throw err;
+                                    console.log("Your new role has been added");
+                                    // go back to starting prompt
+                                    start();
+                                }
+                            );
+                        });
+                })
+        })
 }
 
 function removeEmp() {
