@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "",
+    password: "gothefuckaway",
     database: "employeeSummary_DB"
 });
 
@@ -70,7 +70,7 @@ function start() {
 }
 
 function viewAllEmp() {
-    var sql = "SELECT employee.id, employee.first_name AS FirstName, employee.last_name AS LastName, employee.role_id, roll.title AS Title, roll.salary AS Salary, department.name AS Department FROM employee INNER JOIN roll ON employee.role_id = roll.id INNER JOIN department ON roll.department_id = department.id";
+    var sql = "SELECT employee.id, employee.first_name AS FirstName, employee.last_name AS LastName, roll.title AS Title, roll.salary AS Salary, department.name AS Department FROM employee INNER JOIN roll ON employee.role_id = roll.id INNER JOIN department ON roll.department_id = department.id";
 
     connection.query(sql, function (err, res) {
         if (err) throw err;
