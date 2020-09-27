@@ -51,7 +51,7 @@ function start() {
                 viewRoles();
             }
             else if (answer.actionTaken === "View Employees") {
-                viewEmp();
+                viewAllEmp();
             }
             else if (answer.actionTaken === "Add Employee") {
                 addEmp();
@@ -71,6 +71,18 @@ function start() {
                 connection.end();
             }
         });
+}
+
+function viewAllEmp() {
+    var sql = "SELECT employee.id, employee.first_name AS FirstName, employee.last_name AS LastName, employee.role_id, roll.title AS Title, roll.salary AS Salary, department.name AS Department FROM employee INNER JOIN roll ON employee.role_id = roll.id INNER JOIN department ON roll.department_id = department.id";
+
+    connection.query(sql, function (err, res) {
+        if (err) throw err;
+        console.log("");
+        console.table(res);
+    });
+    start();
+
 }
 
 function viewDep() {
