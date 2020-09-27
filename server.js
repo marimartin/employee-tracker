@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "gothefuckaway",
+    password: "",
     database: "employeeSummary_DB"
 });
 
@@ -204,7 +204,6 @@ function addRole() {
         "SELECT * FROM department",
         function (err, data) {
             if (err) throw err;
-            console.log(data);
             inquirer
                 .prompt([
                     {
