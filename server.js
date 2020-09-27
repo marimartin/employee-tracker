@@ -39,12 +39,11 @@ function start() {
                 "Add Department",
                 "Add Role",
                 "Update Employee Role",
-                "Remove Employee",
                 "Exit"]
         })
         .then(function (answer) {
             // based on their answer, either call the bid or the post functions
-            if (answer.actionTaken === "View Department") {
+            if (answer.actionTaken === "View Departments") {
                 viewDep();
             }
             else if (answer.actionTaken === "View Roles") {
@@ -64,9 +63,6 @@ function start() {
             }
             else if (answer.actionTaken === "Update Employee Role") {
                 updateEmpRole();
-            }
-            else if (answer.actionTaken === "Remove Employee") {
-                removeEmp();
             } else {
                 connection.end();
             }
@@ -104,18 +100,6 @@ function viewRoles() {
         function (err, roles) {
             if (err) throw err;
             console.table(roles);
-            start();
-        }
-
-    )
-}
-
-function viewEmp() {
-    connection.query(
-        "SELECT * FROM employee",
-        function (err, employees) {
-            if (err) throw err;
-            console.table(employees);
             start();
         }
 
@@ -325,6 +309,4 @@ function updateEmpRole() {
         })
 }
 
-function removeEmp() {
-}
 
